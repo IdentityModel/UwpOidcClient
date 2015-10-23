@@ -1,0 +1,20 @@
+﻿<Page
+    x:Class="OidcClient.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OidcClient"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Button x:Name="buttonLogin" Content="Login" HorizontalAlignment="Left" Margin="29,21,0,0" VerticalAlignment="Top" Height="52" Width="195" Click="buttonLogin_Click"/>
+        <Button x:Name="buttonLogout" Content="Logout" HorizontalAlignment="Left" Margin="246,21,0,0" VerticalAlignment="Top" Height="52" Width="195" Click="buttonLogout_Click"/>
+
+        <Button x:Name="buttonStore" Content="Store" HorizontalAlignment="Left" Margin="638,21,0,0" VerticalAlignment="Top" Height="52" Width="147" Click="buttonStore_Click" />
+        <Button x:Name="buttonRetrieve" Content="Retrieve" HorizontalAlignment="Left" Margin="809,21,0,0" VerticalAlignment="Top" Height="52" Width="147" Click="buttonRetrieve_Click" />
+
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="29,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="467" Width="958"/>
+
+    </Grid>
+</Page>
