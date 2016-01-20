@@ -15,6 +15,7 @@
         <Button x:Name="buttonRetrieve" Content="Retrieve" HorizontalAlignment="Left" Margin="809,21,0,0" VerticalAlignment="Top" Height="52" Width="147" Click="buttonRetrieve_Click" />
 
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="29,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="467" Width="958"/>
+        
 
     </Grid>
 </Page>

@@ -16,26 +16,20 @@ namespace OidcClient
         public MainPage()
         {
             this.InitializeComponent();
-
-            _client = new Authentication.OidcClient(
-                "https://localhost:44333/core",
-                "win10",
-                "openid write");
         }
 
         private async void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
-            var result = await _client.LoginAsync();
+            if (_client == null)
+            {
+                var settings = new OidcSettings("uwp", "secret", "openid write");
+                await settings.LoadEndpointsFromMetadataAsync("https://localhost:44333/core");
 
-            if (result.Success)
-            {
-                _result = result;
-                ShowLoginResult();
+                _client = new Authentication.OidcClient(settings);
             }
-            else
-            {
-                textBox.Text = result.Error;
-            }
+
+            _result = await _client.LoginAsync();
+            ShowLoginResult();
         }
 
         private async void buttonLogout_Click(object sender, RoutedEventArgs e)
@@ -48,6 +42,12 @@ namespace OidcClient
 
         private void ShowLoginResult()
         {
+            if (!_result.Success)
+            {
+                textBox.Text = _result.Error;
+                return;
+            }
+
             var sb = new StringBuilder(128);
 
             foreach (var claim in _result.Principal.Claims)
