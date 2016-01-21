@@ -53,7 +53,13 @@ namespace IdentityModel.Uwp.OidcClient
             try
             {
                 result = await WebAuthenticationBroker.AuthenticateAsync(
-                    WebAuthenticationOptions.None, new Uri(url));
+                    WebAuthenticationOptions.SilentMode, new Uri(url));
+
+                if (result.ResponseStatus != WebAuthenticationStatus.Success)
+                {
+                    result = await WebAuthenticationBroker.AuthenticateAsync(
+                        WebAuthenticationOptions.None, new Uri(url));
+                }
             }
             catch (Exception)
             { }
