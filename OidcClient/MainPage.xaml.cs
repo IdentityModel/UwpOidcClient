@@ -35,10 +35,10 @@ namespace OidcClient
 
         private async void buttonLogout_Click(object sender, RoutedEventArgs e)
         {
+            await _client.LogoutAsync(_result.IdentityToken);
+
             _result = null;
             textBox.Text = "";
-
-            await _client.LogoutAsync();
         }
 
         private void ShowLoginResult()
