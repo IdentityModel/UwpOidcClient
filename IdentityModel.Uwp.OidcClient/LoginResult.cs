@@ -44,7 +44,14 @@ namespace IdentityModel.Uwp.OidcClient
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<LoginResult>(credential.Password, settings);
+            var result = JsonConvert.DeserializeObject<LoginResult>(credential.Password, settings);
+
+            if (result.IsAccessTokenValid)
+            {
+                return result;
+            }
+
+            return null;
         }
 
         [JsonIgnore]
