@@ -16,6 +16,9 @@ namespace IdentityModel.Uwp.OidcClient
         public string ClientSecret { get; set; }
         public string Scope { get; set; }
 
+        public bool EnableWindowsAuthentication { get; set; }
+        public bool LoadProfile { get; set; }
+
         public Endpoints Endpoints { get; set; } = new Endpoints();
 
         public OidcSettings(string clientId, string clientSecret, string scope)
@@ -43,6 +46,7 @@ namespace IdentityModel.Uwp.OidcClient
                 Authorize = doc["authorization_endpoint"].ToString(),
                 Token = doc["token_endpoint"].ToString(),
                 EndSession = doc["end_session_endpoint"].ToString(),
+                UserInfo = doc["userinfo_endpoint"].ToString(),
             };
 
             // todo: replace with local validation
@@ -56,5 +60,6 @@ namespace IdentityModel.Uwp.OidcClient
         public string Authorize { get; set; }
         public string IdentityTokenValidation { get; set; }
         public string EndSession { get; set; }
+        public string UserInfo { get; set; }
     }
 }

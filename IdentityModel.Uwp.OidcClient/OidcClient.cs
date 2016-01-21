@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Dominick Baier & Brock Allen. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using IdentityModel.Client;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
@@ -90,6 +92,18 @@ namespace IdentityModel.Uwp.OidcClient
                     Success = false,
                     Error = "invalid audience"
                 };
+            }
+
+            // get profile if enabled
+            if (_settings.LoadProfile)
+            {
+                var userInfoClient = new UserInfoClient(new Uri(_settings.Endpoints.UserInfo), result.AccessToken);
+                var userInfoResponse = await userInfoClient.GetAsync();
+
+                foreach (var claim in userInfoResponse.Claims)
+                {
+                    principal.Identities.First().AddClaim(new Claim(claim.Item1, claim.Item2));
+                }
             }
 
             // validate access token belongs to identity token

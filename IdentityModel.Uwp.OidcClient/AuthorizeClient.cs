@@ -48,8 +48,14 @@ namespace IdentityModel.Uwp.OidcClient
             {
                 try
                 {
+                    var options = WebAuthenticationOptions.SilentMode | WebAuthenticationOptions.UseHttpPost;
+                    if (_settings.EnableWindowsAuthentication)
+                    {
+                        options = options | WebAuthenticationOptions.UseCorporateNetwork;
+                    }
+
                     authenticationResult = await WebAuthenticationBroker.AuthenticateAsync(
-                        WebAuthenticationOptions.SilentMode | WebAuthenticationOptions.UseHttpPost, new Uri(url));
+                        options, new Uri(url));
 
                     if (authenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
                     {
@@ -67,6 +73,12 @@ namespace IdentityModel.Uwp.OidcClient
             // fall back to interactive mode
             try
             {
+                var options = WebAuthenticationOptions.UseHttpPost;
+                if (_settings.EnableWindowsAuthentication)
+                {
+                    options = options | WebAuthenticationOptions.UseCorporateNetwork;
+                }
+
                 authenticationResult = await WebAuthenticationBroker.AuthenticateAsync(
                     WebAuthenticationOptions.UseHttpPost, new Uri(url));
             }
