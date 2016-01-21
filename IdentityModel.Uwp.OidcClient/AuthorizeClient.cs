@@ -80,7 +80,7 @@ namespace IdentityModel.Uwp.OidcClient
                 }
 
                 authenticationResult = await WebAuthenticationBroker.AuthenticateAsync(
-                    WebAuthenticationOptions.UseHttpPost, new Uri(url));
+                    options, new Uri(url));
             }
             catch (Exception ex)
             {
