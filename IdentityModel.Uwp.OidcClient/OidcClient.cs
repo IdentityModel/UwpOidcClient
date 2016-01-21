@@ -100,10 +100,13 @@ namespace IdentityModel.Uwp.OidcClient
                 var userInfoClient = new UserInfoClient(new Uri(_settings.Endpoints.UserInfo), result.AccessToken);
                 var userInfoResponse = await userInfoClient.GetAsync();
 
-                foreach (var claim in userInfoResponse.Claims)
+                var primaryClaimTypes = principal.Claims.Select(c => c.Type).Distinct();
+
+                foreach (var claim in userInfoResponse.Claims.Where(c => !primaryClaimTypes.Contains(c.Item1)))
                 {
                     principal.Identities.First().AddClaim(new Claim(claim.Item1, claim.Item2));
                 }
+                
             }
 
             // validate access token belongs to identity token
