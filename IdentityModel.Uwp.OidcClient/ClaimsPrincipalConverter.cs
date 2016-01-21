@@ -1,24 +1,27 @@
-﻿using IdentityModel;
+﻿// Copyright (c) Dominick Baier & Brock Allen. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+using IdentityModel;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Authentication
+namespace IdentityModel.Uwp.OidcClient
 {
-    public class ClaimsPrincipalLite
+    internal class ClaimsPrincipalLite
     {
         public string AuthenticationType { get; set; }
         public ClaimLite[] Claims { get; set; }
     }
 
-    public class ClaimLite
+    internal class ClaimLite
     {
         public string Type { get; set; }
         public string Value { get; set; }
     }
 
-    public class ClaimsPrincipalConverter : JsonConverter
+    internal class ClaimsPrincipalConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

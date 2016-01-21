@@ -7,8 +7,8 @@
     <ProjectGuid>{0432B6D9-4D7C-42CF-970D-BF54C9B11E12}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Authentication</RootNamespace>
-    <AssemblyName>Authentication</AssemblyName>
+    <RootNamespace>IdentityModel.Uwp.OidcClient</RootNamespace>
+    <AssemblyName>IdentityModel.Uwp.OidcClient</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -114,7 +114,6 @@
     <Compile Include="LoginResult.cs" />
     <Compile Include="OidcSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleJson.cs" />
     <Compile Include="StringExtensions.cs" />
     <Content Include="Properties\Authentication.rd.xml" />
   </ItemGroup>

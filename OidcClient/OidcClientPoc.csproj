@@ -128,9 +128,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Authentication\Authentication.csproj">
+    <ProjectReference Include="..\IdentityModel.Uwp.OidcClient\IdentityModel.Uwp.OidcClient.csproj">
       <Project>{0432b6d9-4d7c-42cf-970d-bf54c9b11e12}</Project>
-      <Name>Authentication</Name>
+      <Name>IdentityModel.Uwp.OidcClient</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

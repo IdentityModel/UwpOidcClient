@@ -1,9 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿// Copyright (c) Dominick Baier & Brock Allen. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
 using Windows.Security.Credentials;
 
-namespace Authentication
+namespace IdentityModel.Uwp.OidcClient
 {
     public class LoginResult
     {
@@ -18,6 +21,8 @@ namespace Authentication
 
         public DateTime AccessTokenExpiration { get; set; }
         public DateTime AuthenticationTime { get; set; }
+
+        public int SecondsBeforeRenewRequired { get; set; } = 60;
 
         static LoginResult()
         {
@@ -47,7 +52,7 @@ namespace Authentication
         {
             get
             {
-                return DateTime.Now < AccessTokenExpiration;
+                return DateTime.Now < AccessTokenExpiration.AddSeconds(- SecondsBeforeRenewRequired);
             }
         }
 

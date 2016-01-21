@@ -3,7 +3,7 @@
 
 using System.Diagnostics;
 
-namespace Authentication
+namespace IdentityModel.Uwp.OidcClient
 {
     internal static class StringExtensions
     {

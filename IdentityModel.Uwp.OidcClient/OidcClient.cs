@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// Copyright (c) Dominick Baier & Brock Allen. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -6,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
 
-namespace Authentication
+namespace IdentityModel.Uwp.OidcClient
 {
     public class OidcClient
     {

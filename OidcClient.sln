@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OidcClientPoc", "OidcClient\OidcClientPoc.csproj", "{72E7DC93-5AA0-43E0-B84A-EE1D7A9635BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "Authentication\Authentication.csproj", "{0432B6D9-4D7C-42CF-970D-BF54C9B11E12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityModel.Uwp.OidcClient", "IdentityModel.Uwp.OidcClient\IdentityModel.Uwp.OidcClient.csproj", "{0432B6D9-4D7C-42CF-970D-BF54C9B11E12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

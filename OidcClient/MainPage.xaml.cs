@@ -1,4 +1,4 @@
-﻿using Authentication;
+﻿using IdentityModel.Uwp.OidcClient;
 using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -10,7 +10,7 @@ namespace OidcClient
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Authentication.OidcClient _client;
+        IdentityModel.Uwp.OidcClient.OidcClient _client;
         LoginResult _result;
 
         public MainPage()
@@ -25,7 +25,7 @@ namespace OidcClient
                 var settings = new OidcSettings("uwp", "secret", "openid write");
                 await settings.LoadEndpointsFromMetadataAsync("https://localhost:44333/core");
 
-                _client = new Authentication.OidcClient(settings);
+                _client = new IdentityModel.Uwp.OidcClient.OidcClient(settings);
             }
 
             _result = await _client.LoginAsync();

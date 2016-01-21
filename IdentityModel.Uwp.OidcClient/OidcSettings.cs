@@ -1,9 +1,13 @@
-﻿using System;
+﻿// Copyright (c) Dominick Baier & Brock Allen. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Authentication
+namespace IdentityModel.Uwp.OidcClient
 {
     public class OidcSettings
     {
@@ -32,7 +36,7 @@ namespace Authentication
 
             var json = await client.GetStringAsync(url);
 
-            var doc = (IDictionary<string, object>)SimpleJson.SimpleJson.DeserializeObject(json);
+            var doc = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
             Endpoints = new Endpoints
             {
