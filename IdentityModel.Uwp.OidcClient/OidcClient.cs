@@ -40,7 +40,7 @@ namespace IdentityModel.Uwp.OidcClient
             return await ValidateAsync(authorizeResult);
         }
 
-        public async Task LogoutAsync(string identityToken = null)
+        public async Task LogoutAsync(string identityToken = null, bool trySilent = true)
         {
             string url = _settings.Endpoints.EndSession;
 
@@ -52,14 +52,19 @@ namespace IdentityModel.Uwp.OidcClient
             WebAuthenticationResult result;
             try
             {
-                result = await WebAuthenticationBroker.AuthenticateAsync(
-                    WebAuthenticationOptions.SilentMode, new Uri(url));
-
-                if (result.ResponseStatus != WebAuthenticationStatus.Success)
+                if (trySilent)
                 {
                     result = await WebAuthenticationBroker.AuthenticateAsync(
-                        WebAuthenticationOptions.None, new Uri(url));
+                        WebAuthenticationOptions.SilentMode, new Uri(url));
+
+                    if (result.ResponseStatus == WebAuthenticationStatus.Success)
+                    {
+                        return;
+                    }
                 }
+
+                result = await WebAuthenticationBroker.AuthenticateAsync(
+                    WebAuthenticationOptions.None, new Uri(url));
             }
             catch (Exception)
             { }
@@ -112,7 +117,7 @@ namespace IdentityModel.Uwp.OidcClient
                 {
                     principal.Identities.First().AddClaim(new Claim(claim.Item1, claim.Item2));
                 }
-                
+
             }
 
             // validate access token belongs to identity token
