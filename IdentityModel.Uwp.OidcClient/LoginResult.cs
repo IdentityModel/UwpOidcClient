@@ -30,14 +30,14 @@ namespace IdentityModel.Uwp.OidcClient
             settings.Converters.Add(new ClaimsPrincipalConverter());
         }
 
-        public static LoginResult Retrieve()
+        public static LoginResult Retrieve(string resourceName = "oidc")
         {
             var vault = new PasswordVault();
             PasswordCredential credential;
 
             try
             {
-                credential = vault.Retrieve("oidc", "login_result");
+                credential = vault.Retrieve(resourceName, "login_result");
             }
             catch (Exception)
             {
@@ -63,7 +63,7 @@ namespace IdentityModel.Uwp.OidcClient
             }
         }
 
-        public void Store()
+        public void Store(string resourceName = "oidc")
         {
             var vault = new PasswordVault();
 
@@ -78,7 +78,7 @@ namespace IdentityModel.Uwp.OidcClient
             catch { }
 
             var credential = new PasswordCredential(
-                "oidc", 
+                resourceName, 
                 "login_result",
                 JsonConvert.SerializeObject(this, settings));
 
