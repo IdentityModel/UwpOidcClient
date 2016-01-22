@@ -20,6 +20,17 @@ namespace IdentityModel.Uwp.OidcClient
         public bool LoadProfile { get; set; } = true;
         public bool FilterProtocolClaims { get; set; } = true;
 
+        public IEnumerable<string> ProtocolClaims { get; set; } = new[]
+        {
+            "iss",
+            "exp",
+            "nbf",
+            "aud",
+            "nonce",
+            "iat",
+            "auth_time"
+        };
+
         public Endpoints Endpoints { get; set; } = new Endpoints();
 
         public OidcSettings(string clientId, string clientSecret, string scope)
