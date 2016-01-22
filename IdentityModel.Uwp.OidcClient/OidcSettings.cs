@@ -17,7 +17,8 @@ namespace IdentityModel.Uwp.OidcClient
         public string Scope { get; set; }
 
         public bool EnableWindowsAuthentication { get; set; }
-        public bool LoadProfile { get; set; }
+        public bool LoadProfile { get; set; } = true;
+        public bool FilterProtocolClaims { get; set; } = true;
 
         public Endpoints Endpoints { get; set; } = new Endpoints();
 

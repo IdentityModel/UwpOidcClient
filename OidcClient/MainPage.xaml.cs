@@ -23,7 +23,6 @@ namespace OidcClient
             if (_client == null)
             {
                 var settings = new OidcSettings("uwp", "secret", "openid profile write");
-                settings.LoadProfile = true;
                 await settings.LoadEndpointsFromMetadataAsync("https://localhost:44333/core");
 
                 _client = new IdentityModel.Uwp.OidcClient.OidcClient(settings);

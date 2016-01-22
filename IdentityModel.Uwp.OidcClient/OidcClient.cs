@@ -18,6 +18,17 @@ namespace IdentityModel.Uwp.OidcClient
         private readonly AuthorizeClient _authorizeClient;
         private readonly OidcSettings _settings;
 
+        private IEnumerable<string> _protocolClaims = new[]
+        {
+            "iss",
+            "exp",
+            "nbf",
+            "aud",
+            "nonce",
+            "iat",
+            "auth_time"
+        };
+
         public OidcClient(OidcSettings settings)
         {
             _authorizeClient = new AuthorizeClient(settings);
@@ -149,7 +160,7 @@ namespace IdentityModel.Uwp.OidcClient
             return new LoginResult
             {
                 Success = true,
-                Principal = principal,
+                Principal = FilterProtocolClaims(principal),
                 AccessToken = result.AccessToken,
                 AccessTokenExpiration = DateTime.Now.AddSeconds(result.ExpiresIn),
                 IdentityToken = result.IdentityToken,
@@ -198,6 +209,19 @@ namespace IdentityModel.Uwp.OidcClient
             }
 
             return new ClaimsPrincipal(new ClaimsIdentity(claims, "OIDC"));
+        }
+
+        private ClaimsPrincipal FilterProtocolClaims(ClaimsPrincipal principal)
+        {
+            if (_settings.FilterProtocolClaims)
+            {
+                var filteredClaims = principal.Claims.ToList().Where(c => !_protocolClaims.Contains(c.Type));
+
+                var id = new ClaimsIdentity(filteredClaims, principal.Identities.First().AuthenticationType);
+                return new ClaimsPrincipal(id);
+            }
+
+            return principal;
         }
     }
 }
