@@ -3,19 +3,20 @@
   "version": 1,
   "targets": {
     "UAP,Version=v10.0": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -26,7 +27,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -239,12 +240,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -1584,19 +1585,20 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -1607,7 +1609,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -1863,12 +1865,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -3255,19 +3257,20 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -3278,7 +3281,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -3520,12 +3523,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -4898,19 +4901,20 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -4921,7 +4925,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -5182,12 +5186,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -6574,19 +6578,20 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -6597,7 +6602,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -6839,12 +6844,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -8217,19 +8222,20 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -8240,7 +8246,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -8501,12 +8507,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -9893,19 +9899,20 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
-      "IdentityModel/1.2.0": {
+      "IdentityModel/1.4.0": {
         "dependencies": {
-          "Microsoft.Net.Http": "[2.2.28, )",
-          "Newtonsoft.Json": "[6.0.8, )"
+          "Microsoft.Bcl": "[1.1.10, 2.0.0)",
+          "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
+          "Microsoft.Net.Http": "[2.2.28, )"
         },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll": {}
         }
       },
-      "Microsoft.Bcl/1.1.9": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
           "Microsoft.Bcl.Build": "[1.0.14, )"
         },
@@ -9916,7 +9923,7 @@
           "lib/win8/_._": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.14": {},
+      "Microsoft.Bcl.Build/1.0.21": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Collections": "[4.0.10, )",
@@ -10158,12 +10165,12 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Newtonsoft.Json/6.0.8": {
+      "Newtonsoft.Json/8.0.2": {
         "compile": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netcore45/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -11537,39 +11544,26 @@
     }
   },
   "libraries": {
-    "IdentityModel/1.2.0": {
-      "sha512": "2T+gY3vp7X4LJROVS2MRjfLh8doQiDZmLnrnbB+zMyIiMamtlL6Vltr1wP8a/NtLCqe7+6P7FjJryIXxowa7rQ==",
+    "IdentityModel/1.4.0": {
+      "sha512": "27KufqYOa5LY1ygL3QDwFseN3kuGH1jeZU2M5kt3m8PjRAR2xb1gtxm5bqiLGzkdxZOTBgnrhmyo37T4V+GFmA==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
         "_rels/.rels",
         "IdentityModel.nuspec",
-        "lib/net45/IdentityModel.Net45.dll",
-        "lib/net45/IdentityModel.Net45.pdb",
-        "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.dll",
-        "lib/portable-net45+wp80+win8+wpa81/IdentityModel.Portable.pdb",
-        "package/services/metadata/core-properties/5564fc2ea57b40d7b362868e022540ef.psmdcp"
+        "lib/net45/IdentityModel.dll",
+        "lib/net45/IdentityModel.pdb",
+        "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll",
+        "lib/portable-net45+wp80+win8+wpa81/IdentityModel.pdb",
+        "package/services/metadata/core-properties/68730fafbe76425ca0c99cad89d858b9.psmdcp"
       ]
     },
-    "Microsoft.Bcl/1.1.9": {
-      "sha512": "USQ55innJy8K+tAXvVa1O8dUTp2s7pmJ5cJj6Tl02HtGc2xBDj0P2QH5620HbGXIWKWYhydoeQF8Rm/JRDBGhw==",
+    "Microsoft.Bcl/1.1.10": {
+      "sha512": "+tTqoh/M1pyL8El3qLy30EcwnAtyvFoDZJtdG9Cbg/WdFbh4N8kyrq198XHuEL7lnJbeD0DRO8jcX5IIOh05cQ==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
         "_rels/.rels",
-        "content/monoandroid/_._",
-        "content/monotouch/_._",
-        "content/net45/_._",
-        "content/portable-net45+win8+wp8+wpa81/_._",
-        "content/portable-net45+win8+wpa81/_._",
-        "content/portable-net451+win81/_._",
-        "content/portable-net451+win81+wpa81/_._",
-        "content/portable-win81+wp81+wpa81/_._",
-        "content/sl4/_._",
-        "content/sl5/_._",
-        "content/win8/_._",
-        "content/wp8/_._",
-        "content/wpa81/_._",
         "lib/monoandroid/_._",
         "lib/monotouch/_._",
         "lib/net40/ensureRedirect.xml",
@@ -11649,29 +11643,23 @@
         "lib/win8/_._",
         "lib/wp8/_._",
         "lib/wpa81/_._",
+        "lib/Xamarin.iOS10/_._",
         "License-Stable.rtf",
         "Microsoft.Bcl.nuspec",
-        "package/services/metadata/core-properties/a2c2e4aac469425ea858153a6ad602c0.psmdcp"
+        "package/services/metadata/core-properties/b43ef6ce7de9447f9f8b39e2e41a185e.psmdcp"
       ]
     },
-    "Microsoft.Bcl.Build/1.0.14": {
-      "sha512": "cDLKSvNvRa519hplsbSoYqO69TjdDIhfjtKUM0g20/nVROoWsGav9KCI9HtnGjLmdV1+TcUUDhbotcllibjPEA==",
+    "Microsoft.Bcl.Build/1.0.21": {
+      "sha512": "sgHu4mIt0+NVGyI12Bj4hLPypNK55UOH+ologj2LqDCjxq3EbIxe/uAtHjY+fEwbE1dtsAHG8SXHf+V/EYbKTg==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
         "_rels/.rels",
-        "content/net40/_._",
-        "content/netcore45/_._",
-        "content/portable-net40+win8+sl4+wp71+wpa81/_._",
-        "content/sl4/_._",
-        "content/sl4-windowsphone71/_._",
+        "build/Microsoft.Bcl.Build.targets",
+        "build/Microsoft.Bcl.Build.Tasks.dll",
         "License-Stable.rtf",
         "Microsoft.Bcl.Build.nuspec",
-        "package/services/metadata/core-properties/ded9cfb683144eaba586f13af4ae979c.psmdcp",
-        "tools/Install.ps1",
-        "tools/Microsoft.Bcl.Build.targets",
-        "tools/Microsoft.Bcl.Build.Tasks.dll",
-        "tools/Uninstall.ps1"
+        "package/services/metadata/core-properties/642092c96f444452801a3d9f187d628b.psmdcp"
       ]
     },
     "Microsoft.CSharp/4.0.0": {
@@ -12391,8 +12379,8 @@
         "ref/xamarinmac20/_._"
       ]
     },
-    "Newtonsoft.Json/6.0.8": {
-      "sha512": "7ut47NDedTW19EbL0JpFDYUP62fcuz27hJrehCDNajdCS5NtqL+E39+7Um3OkNc2wl2ym7K8Ln5eNuLus6mVGQ==",
+    "Newtonsoft.Json/8.0.2": {
+      "sha512": "e5yWmEfu68rmtG431zl9N/7PlNKQDIuiDW5MHlEFAZcecakcxrIGnKqrPAtWNILzK2oNanRB5cD150MYhECK3g==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
@@ -12405,14 +12393,12 @@
         "lib/net40/Newtonsoft.Json.xml",
         "lib/net45/Newtonsoft.Json.dll",
         "lib/net45/Newtonsoft.Json.xml",
-        "lib/netcore45/Newtonsoft.Json.dll",
-        "lib/netcore45/Newtonsoft.Json.xml",
         "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.xml",
-        "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll",
-        "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.xml",
+        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll",
+        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.xml",
         "Newtonsoft.Json.nuspec",
-        "package/services/metadata/core-properties/d6cceb7474b245aab29598e10c6e65d6.psmdcp",
+        "package/services/metadata/core-properties/cc8c591d554640789c6a6ef6456f7772.psmdcp",
         "tools/install.ps1"
       ]
     },
@@ -15114,8 +15100,9 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "IdentityModel >= 1.2.0",
-      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0"
+      "IdentityModel >= 1.4.0",
+      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
+      "Newtonsoft.Json >= 8.0.2"
     ],
     "UAP,Version=v10.0": []
   }

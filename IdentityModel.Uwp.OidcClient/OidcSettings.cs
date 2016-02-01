@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 
 namespace IdentityModel.Uwp.OidcClient
 {
-    public class OidcSettings
+    public class OidcClientSettings
     {
         public string Authority { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string Scope { get; set; }
 
-        public bool EnableWindowsAuthentication { get; set; }
+        public bool EnableWindowsAuthentication { get; set; } = false;
         public bool LoadProfile { get; set; } = true;
         public bool FilterProtocolClaims { get; set; } = true;
+        public bool UseProofKeys { get; set; } = true;
 
         public IEnumerable<string> ProtocolClaims { get; set; } = new[]
         {
@@ -28,12 +29,13 @@ namespace IdentityModel.Uwp.OidcClient
             "aud",
             "nonce",
             "iat",
-            "auth_time"
+            "auth_time",
+            "c_hash"
         };
 
         public Endpoints Endpoints { get; set; } = new Endpoints();
 
-        public OidcSettings(string clientId, string clientSecret, string scope)
+        public OidcClientSettings(string clientId, string clientSecret, string scope)
         {
             if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
             if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));

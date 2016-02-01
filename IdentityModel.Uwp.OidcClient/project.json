@@ -1,7 +1,8 @@
 ﻿{
   "dependencies": {
+    "IdentityModel": "1.4.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "IdentityModel": "1.2.0"
+    "Newtonsoft.Json": "8.0.2"
   },
   "frameworks": {
     "uap10.0": {}

@@ -16,9 +16,9 @@ namespace IdentityModel.Uwp.OidcClient
     public class OidcClient
     {
         private readonly AuthorizeClient _authorizeClient;
-        private readonly OidcSettings _settings;
+        private readonly OidcClientSettings _settings;
 
-        public OidcClient(OidcSettings settings)
+        public OidcClient(OidcClientSettings settings)
         {
             _authorizeClient = new AuthorizeClient(settings);
             _settings = settings;
@@ -105,10 +105,25 @@ namespace IdentityModel.Uwp.OidcClient
                 };
             }
 
+            // validate c_hash
+
+            // get access token
+            var tokenClient = new TokenClient(_settings.Endpoints.Token, _settings.ClientId, _settings.ClientSecret);
+            var tokenResult = await tokenClient.RequestAuthorizationCodeAsync(result.Code, result.RedirectUri);
+
+            if (tokenResult.IsError || tokenResult.IsHttpError)
+            {
+                return new LoginResult
+                {
+                    Success = false,
+                    Error = tokenResult.Error
+                };
+            }
+
             // get profile if enabled
             if (_settings.LoadProfile)
             {
-                var userInfoClient = new UserInfoClient(new Uri(_settings.Endpoints.UserInfo), result.AccessToken);
+                var userInfoClient = new UserInfoClient(new Uri(_settings.Endpoints.UserInfo), tokenResult.AccessToken);
                 var userInfoResponse = await userInfoClient.GetAsync();
 
                 var primaryClaimTypes = principal.Claims.Select(c => c.Type).Distinct();
@@ -150,8 +165,8 @@ namespace IdentityModel.Uwp.OidcClient
             {
                 Success = true,
                 Principal = FilterProtocolClaims(principal),
-                AccessToken = result.AccessToken,
-                AccessTokenExpiration = DateTime.Now.AddSeconds(result.ExpiresIn),
+                AccessToken = tokenResult.AccessToken,
+                AccessTokenExpiration = DateTime.Now.AddSeconds(tokenResult.ExpiresIn),
                 IdentityToken = result.IdentityToken,
                 AuthenticationTime = DateTime.Now
             };

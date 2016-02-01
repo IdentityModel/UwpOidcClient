@@ -3,16 +3,19 @@
 
 using IdentityModel.Client;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
+using Windows.Security.Cryptography;
+using Windows.Security.Cryptography.Core;
 
 namespace IdentityModel.Uwp.OidcClient
 {
     public class AuthorizeClient
     {
-        private readonly OidcSettings _settings;
-        
-        public AuthorizeClient(OidcSettings settings)
+        private readonly OidcClientSettings _settings;
+
+        public AuthorizeClient(OidcClientSettings settings)
         {
             _settings = settings;
         }
@@ -24,25 +27,17 @@ namespace IdentityModel.Uwp.OidcClient
 
         public async Task<AuthorizeResult> StartAsync(bool trySilent = false)
         {
-            var callback = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
-            var nonce = Guid.NewGuid().ToString("N");
-
-            var request = new AuthorizeRequest(_settings.Endpoints.Authorize);
-            var url = request.CreateAuthorizeUrl(
-                _settings.ClientId,
-                "code",
-                _settings.Scope,
-                callback.AbsoluteUri,
-                nonce: nonce,
-                responseMode: "form_post");
-
-            WebAuthenticationResult authenticationResult;
+            WebAuthenticationResult wabResult;
             AuthorizeResult result = new AuthorizeResult
             {
                 IsError = true,
-                Nonce = nonce
             };
 
+            result.Nonce = Guid.NewGuid().ToString("N");
+            result.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
+            string codeChallenge = CreateCodeChallenge(result);
+            var url = CreateUrl(result, codeChallenge);
+            
             // try silent mode if requested
             if (trySilent)
             {
@@ -54,13 +49,13 @@ namespace IdentityModel.Uwp.OidcClient
                         options = options | WebAuthenticationOptions.UseCorporateNetwork;
                     }
 
-                    authenticationResult = await WebAuthenticationBroker.AuthenticateAsync(
+                    wabResult = await WebAuthenticationBroker.AuthenticateAsync(
                         options, new Uri(url));
 
-                    if (authenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
+                    if (wabResult.ResponseStatus == WebAuthenticationStatus.Success)
                     {
-                        return await FillTokens(authenticationResult, result);
-                        
+                        return await ParseResult(wabResult, result);
+
                     }
                 }
                 catch (Exception ex)
@@ -79,7 +74,7 @@ namespace IdentityModel.Uwp.OidcClient
                     options = options | WebAuthenticationOptions.UseCorporateNetwork;
                 }
 
-                authenticationResult = await WebAuthenticationBroker.AuthenticateAsync(
+                wabResult = await WebAuthenticationBroker.AuthenticateAsync(
                     options, new Uri(url));
             }
             catch (Exception ex)
@@ -88,43 +83,73 @@ namespace IdentityModel.Uwp.OidcClient
                 return result;
             }
 
-            return await FillTokens(authenticationResult, result);
+            return await ParseResult(wabResult, result);
         }
 
-        private async Task<AuthorizeResult> FillTokens(WebAuthenticationResult authenticationResult, AuthorizeResult result)
+        private string CreateUrl(AuthorizeResult result, string codeChallenge)
+        {
+            var request = new AuthorizeRequest(_settings.Endpoints.Authorize);
+            var url = request.CreateAuthorizeUrl(
+                clientId: _settings.ClientId,
+                responseType: OidcConstants.ResponseTypes.CodeIdToken,
+                scope: _settings.Scope,
+                redirectUri: result.RedirectUri,
+                responseMode: OidcConstants.ResponseModes.FormPost,
+                nonce: result.Nonce,
+                codeChallenge: codeChallenge,
+                codeChallengeMethod: _settings.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null);
+
+            return url;
+        }
+
+        private string CreateCodeChallenge(AuthorizeResult result)
+        {
+            if (_settings.UseProofKeys)
+            {
+                result.Verifier = Guid.NewGuid().ToString("N");
+                var sha256 = HashAlgorithmProvider.OpenAlgorithm("SHA256");
+
+                var challengeBuffer = sha256.HashData(
+                    CryptographicBuffer.CreateFromByteArray(
+                        Encoding.ASCII.GetBytes(result.Verifier)));
+                byte[] challengeBytes;
+
+                CryptographicBuffer.CopyToByteArray(challengeBuffer, out challengeBytes);
+                return Base64Url.Encode(challengeBytes);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private Task<AuthorizeResult> ParseResult(WebAuthenticationResult authenticationResult, AuthorizeResult result)
         {
             var response = new AuthorizeResponse(authenticationResult.ResponseData);
 
             if (response.IsError)
             {
                 result.Error = response.Error;
-                return result;
+                return Task.FromResult(result);
             }
 
             if (string.IsNullOrEmpty(response.Code))
             {
                 result.Error = "Missing authorization code";
-                return result;
+                return Task.FromResult(result);
             }
 
-            // exchange code with tokens
-            var callback = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
-            var tokenClient = new TokenClient(_settings.Endpoints.Token, _settings.ClientId, _settings.ClientSecret);
-            var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(response.Code, callback.AbsoluteUri);
-
-            if (tokenResponse.IsError || tokenResponse.IsHttpError)
+            if (string.IsNullOrEmpty(response.IdentityToken))
             {
-                result.Error = tokenResponse.Error ?? tokenResponse.HttpErrorReason;
-                return result;
+                result.Error = "Missing identity token";
+                return Task.FromResult(result);
             }
 
-            result.AccessToken = tokenResponse.AccessToken;
-            result.IdentityToken = tokenResponse.IdentityToken;
-            result.RefreshToken = tokenResponse.RefreshToken;
-            result.ExpiresIn = (int)tokenResponse.ExpiresIn;
+            result.IdentityToken = response.IdentityToken;
+            result.Code = response.Code;
             result.IsError = false;
 
-            return result;
+            return Task.FromResult(result);
         }
     }
 }
