@@ -7,8 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
+using Windows.Security.Cryptography;
+using Windows.Security.Cryptography.Core;
 using Windows.Web.Http;
 
 namespace IdentityModel.Uwp.OidcClient
@@ -106,10 +109,37 @@ namespace IdentityModel.Uwp.OidcClient
             }
 
             // validate c_hash
+            var cHash = principal.FindFirst("c_hash")?.Value ?? "";
+
+            var sha256 = HashAlgorithmProvider.OpenAlgorithm("SHA256");
+
+            var codeHash = sha256.HashData(
+                CryptographicBuffer.CreateFromByteArray(
+                    Encoding.ASCII.GetBytes(result.Code)));
+
+            byte[] codeHashArray;
+            CryptographicBuffer.CopyToByteArray(codeHash, out codeHashArray);
+
+            byte[] leftPart = new byte[16];
+            Array.Copy(codeHashArray, leftPart, 16);
+
+            var leftPartB64 = Base64Url.Encode(leftPart);
+
+            if (!leftPartB64.Equals(cHash))
+            {
+                return new LoginResult
+                {
+                    Success = false,
+                    Error = "invalid code"
+                };
+            }
 
             // get access token
             var tokenClient = new TokenClient(_settings.Endpoints.Token, _settings.ClientId, _settings.ClientSecret);
-            var tokenResult = await tokenClient.RequestAuthorizationCodeAsync(result.Code, result.RedirectUri);
+            var tokenResult = await tokenClient.RequestAuthorizationCodeAsync(
+                result.Code, 
+                result.RedirectUri, 
+                codeVerifier: result.Verifier);
 
             if (tokenResult.IsError || tokenResult.IsHttpError)
             {
@@ -135,37 +165,13 @@ namespace IdentityModel.Uwp.OidcClient
 
             }
 
-            // validate access token belongs to identity token
-            //var atHash = principal.FindFirst("at_hash")?.Value ?? "";
-            //var sha256 = HashAlgorithmProvider.OpenAlgorithm("SHA256");
-
-            //var tokenHash = sha256.HashData(
-            //    CryptographicBuffer.CreateFromByteArray(
-            //        Encoding.ASCII.GetBytes(result.AccessToken)));
-
-            //byte[] tokenHashArray;
-            //CryptographicBuffer.CopyToByteArray(tokenHash, out tokenHashArray);
-
-            //byte[] leftPart = new byte[16];
-            //Array.Copy(tokenHashArray, leftPart, 16);
-
-            //var leftPartB64 = Base64Url.Encode(leftPart);
-
-            //if (!leftPartB64.Equals(atHash))
-            //{
-            //    return new LoginResult
-            //    {
-            //        Success = false,
-            //        Error = "invalid access token"
-            //    };
-            //}
-
             // success
             return new LoginResult
             {
                 Success = true,
                 Principal = FilterProtocolClaims(principal),
                 AccessToken = tokenResult.AccessToken,
+                RefreshToken = tokenResult.RefreshToken,
                 AccessTokenExpiration = DateTime.Now.AddSeconds(tokenResult.ExpiresIn),
                 IdentityToken = result.IdentityToken,
                 AuthenticationTime = DateTime.Now

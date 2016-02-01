@@ -33,6 +33,7 @@ namespace IdentityModel.Uwp.OidcClient
                 IsError = true,
             };
 
+            // todo: replace with CryptoRandom
             result.Nonce = Guid.NewGuid().ToString("N");
             result.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
             string codeChallenge = CreateCodeChallenge(result);
@@ -86,27 +87,12 @@ namespace IdentityModel.Uwp.OidcClient
             return await ParseResult(wabResult, result);
         }
 
-        private string CreateUrl(AuthorizeResult result, string codeChallenge)
-        {
-            var request = new AuthorizeRequest(_settings.Endpoints.Authorize);
-            var url = request.CreateAuthorizeUrl(
-                clientId: _settings.ClientId,
-                responseType: OidcConstants.ResponseTypes.CodeIdToken,
-                scope: _settings.Scope,
-                redirectUri: result.RedirectUri,
-                responseMode: OidcConstants.ResponseModes.FormPost,
-                nonce: result.Nonce,
-                codeChallenge: codeChallenge,
-                codeChallengeMethod: _settings.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null);
-
-            return url;
-        }
-
         private string CreateCodeChallenge(AuthorizeResult result)
         {
             if (_settings.UseProofKeys)
             {
-                result.Verifier = Guid.NewGuid().ToString("N");
+                // todo: replace with CryptoRandom
+                result.Verifier = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
                 var sha256 = HashAlgorithmProvider.OpenAlgorithm("SHA256");
 
                 var challengeBuffer = sha256.HashData(
@@ -121,6 +107,22 @@ namespace IdentityModel.Uwp.OidcClient
             {
                 return null;
             }
+        }
+
+        private string CreateUrl(AuthorizeResult result, string codeChallenge)
+        {
+            var request = new AuthorizeRequest(_settings.Endpoints.Authorize);
+            var url = request.CreateAuthorizeUrl(
+                clientId: _settings.ClientId,
+                responseType: OidcConstants.ResponseTypes.CodeIdToken,
+                scope: _settings.Scope,
+                redirectUri: result.RedirectUri,
+                responseMode: OidcConstants.ResponseModes.FormPost,
+                nonce: result.Nonce,
+                codeChallenge: codeChallenge,
+                codeChallengeMethod: _settings.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null);
+
+            return url;
         }
 
         private Task<AuthorizeResult> ParseResult(WebAuthenticationResult authenticationResult, AuthorizeResult result)
