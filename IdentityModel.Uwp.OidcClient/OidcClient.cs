@@ -3,15 +3,14 @@
 
 using IdentityModel.Client;
 using Newtonsoft.Json.Linq;
+using PCLCrypto;
+using static PCLCrypto.WinRTCrypto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Security.Authentication.Web;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
 using Windows.Web.Http;
 
 namespace IdentityModel.Uwp.OidcClient
@@ -86,7 +85,7 @@ namespace IdentityModel.Uwp.OidcClient
             // validate c_hash
             var cHash = principal.FindFirst("c_hash")?.Value ?? "";
 
-            var sha256 = HashAlgorithmProvider.OpenAlgorithm("SHA256");
+            var sha256 = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Sha256);
 
             var codeHash = sha256.HashData(
                 CryptographicBuffer.CreateFromByteArray(
