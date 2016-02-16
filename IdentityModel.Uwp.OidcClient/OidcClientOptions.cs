@@ -11,8 +11,9 @@ namespace IdentityModel.Uwp.OidcClient
         public string ClientId { get; }
         public string ClientSecret { get; }
         public string Scope { get; }
+        public string RedirectUri { get; }
+        public WebViewBase WebView { get; }
         public Flow Flow { get; set; } = Flow.Hybrid;
-        public bool EnableWindowsAuthentication { get; set; } = false;
         public bool LoadProfile { get; set; } = true;
         public bool FilterClaims { get; set; } = true;
         public bool UseProofKeys { get; set; } = true;
@@ -30,31 +31,35 @@ namespace IdentityModel.Uwp.OidcClient
             JwtClaimTypes.AccessTokenHash
         };
 
-        public OidcClientOptions(Endpoints endpoints, string clientId, string clientSecret, string scope)
+        private OidcClientOptions(string clientId, string clientSecret, string scope, string redirectUri, WebViewBase webView)
+        {
+            if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
+            if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
+            if (string.IsNullOrWhiteSpace(scope)) throw new ArgumentNullException(nameof(scope));
+            if (string.IsNullOrWhiteSpace(redirectUri)) throw new ArgumentNullException(nameof(redirectUri));
+            if (webView == null) throw new ArgumentNullException(nameof(webView));
+
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+            Scope = scope;
+            RedirectUri = redirectUri;
+            WebView = webView;
+        }
+        public OidcClientOptions(Endpoints endpoints, string clientId, string clientSecret, string scope, string redirectUri, WebViewBase webView)
+            : this(clientId, clientSecret, scope, redirectUri, webView)
         {
             if (endpoints == null) throw new ArgumentNullException(nameof(endpoints));
             endpoints.Validate();
-            if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
-            if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
-            if (string.IsNullOrWhiteSpace(scope)) throw new ArgumentNullException(nameof(scope));
 
             _endpoints = new Lazy<Task<Endpoints>>(() => Task.FromResult(endpoints));
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            Scope = scope;
         }
 
-        public OidcClientOptions(string authority, string clientId, string clientSecret, string scope)
+        public OidcClientOptions(string authority, string clientId, string clientSecret, string scope, string redirectUri, WebViewBase webView)
+            : this(clientId, clientSecret, scope, redirectUri, webView)
         {
             if (string.IsNullOrWhiteSpace(authority)) throw new ArgumentNullException(nameof(authority));
-            if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
-            if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
-            if (string.IsNullOrWhiteSpace(scope)) throw new ArgumentNullException(nameof(scope));
 
             _endpoints = new Lazy<Task<Endpoints>>(async () => await Endpoints.LoadFromMetadataAsync(authority));
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            Scope = scope;
         }
 
         public async Task<Endpoints> GetEndpointsAsync()

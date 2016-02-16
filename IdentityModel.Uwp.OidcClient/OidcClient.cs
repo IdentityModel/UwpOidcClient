@@ -29,7 +29,7 @@ namespace IdentityModel.Uwp.OidcClient
 
         public async Task<LoginResult> LoginAsync(bool trySilent = false, object extraParameters = null)
         {
-            var authorizeResult = await _authorizeClient.StartAsync(trySilent, extraParameters);
+            var authorizeResult = await _authorizeClient.AuthorizeAsync(trySilent, extraParameters);
 
             if (authorizeResult.IsError)
             {
@@ -43,34 +43,9 @@ namespace IdentityModel.Uwp.OidcClient
             return await ValidateAsync(authorizeResult);
         }
 
-        public async Task LogoutAsync(string identityToken = null, bool trySilent = true)
+        public Task LogoutAsync(string identityToken = null, bool trySilent = true)
         {
-            string url = (await _options.GetEndpointsAsync()).EndSession;
-
-            if (!string.IsNullOrWhiteSpace(identityToken))
-            {
-                url += "?id_token_hint=" + identityToken;
-            }
-
-            WebAuthenticationResult result;
-            try
-            {
-                if (trySilent)
-                {
-                    result = await WebAuthenticationBroker.AuthenticateAsync(
-                        WebAuthenticationOptions.SilentMode, new Uri(url));
-
-                    if (result.ResponseStatus == WebAuthenticationStatus.Success)
-                    {
-                        return;
-                    }
-                }
-
-                result = await WebAuthenticationBroker.AuthenticateAsync(
-                    WebAuthenticationOptions.None, new Uri(url));
-            }
-            catch (Exception)
-            { }
+            return _authorizeClient.EndSessionAsync(identityToken, trySilent);
         }
 
         private async Task<LoginResult> ValidateAsync(AuthorizeResult result)
