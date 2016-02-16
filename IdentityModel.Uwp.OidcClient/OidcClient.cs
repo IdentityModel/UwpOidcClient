@@ -27,9 +27,9 @@ namespace IdentityModel.Uwp.OidcClient
             _options = options;
         }
 
-        public async Task<LoginResult> LoginAsync(bool trySilent = false)
+        public async Task<LoginResult> LoginAsync(bool trySilent = false, object extraParameters = null)
         {
-            var authorizeResult = await _authorizeClient.StartAsync(trySilent);
+            var authorizeResult = await _authorizeClient.StartAsync(trySilent, extraParameters);
 
             if (authorizeResult.IsError)
             {

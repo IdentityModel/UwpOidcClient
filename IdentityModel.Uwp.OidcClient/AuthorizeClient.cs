@@ -25,7 +25,7 @@ namespace IdentityModel.Uwp.OidcClient
             return WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
         }
 
-        public async Task<AuthorizeResult> StartAsync(bool trySilent = false)
+        public async Task<AuthorizeResult> StartAsync(bool trySilent = false, object extraParameters = null)
         {
             WebAuthenticationResult wabResult;
             AuthorizeResult result = new AuthorizeResult
@@ -37,7 +37,7 @@ namespace IdentityModel.Uwp.OidcClient
             result.Nonce = Guid.NewGuid().ToString("N");
             result.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
             string codeChallenge = CreateCodeChallenge(result);
-            var url = await CreateUrlAsync(result, codeChallenge);
+            var url = await CreateUrlAsync(result, codeChallenge, extraParameters);
             
             // try silent mode if requested
             if (trySilent)
@@ -109,7 +109,7 @@ namespace IdentityModel.Uwp.OidcClient
             }
         }
 
-        private async Task<string> CreateUrlAsync(AuthorizeResult result, string codeChallenge)
+        private async Task<string> CreateUrlAsync(AuthorizeResult result, string codeChallenge, object extraParameters)
         {
             var request = new AuthorizeRequest((await _options.GetEndpointsAsync()).Authorize);
             var url = request.CreateAuthorizeUrl(
@@ -120,7 +120,8 @@ namespace IdentityModel.Uwp.OidcClient
                 responseMode: OidcConstants.ResponseModes.FormPost,
                 nonce: result.Nonce,
                 codeChallenge: codeChallenge,
-                codeChallengeMethod: _options.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null);
+                codeChallengeMethod: _options.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null,
+                extra: extraParameters);
 
             return url;
         }

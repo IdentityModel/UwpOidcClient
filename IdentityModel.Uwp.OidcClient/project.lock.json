@@ -3,7 +3,7 @@
   "version": 1,
   "targets": {
     "UAP,Version=v10.0": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -1585,7 +1585,7 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -3257,7 +3257,7 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -4901,7 +4901,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -6578,7 +6578,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -8222,7 +8222,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -9899,7 +9899,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
-      "IdentityModel/1.4.2": {
+      "IdentityModel/1.6.0": {
         "dependencies": {
           "Microsoft.Bcl": "[1.1.10, 2.0.0)",
           "Microsoft.Bcl.Build": "[1.0.21, 2.0.0)",
@@ -11544,8 +11544,8 @@
     }
   },
   "libraries": {
-    "IdentityModel/1.4.2": {
-      "sha512": "tgrRqOL3cPYJ1J8DU5/zoM+Ln/6dqxOzFgcx3MM7Iho31p7YvqnbGIYr0bxuqiuQb+e3tmP3TfcYHfzY/VWtBw==",
+    "IdentityModel/1.6.0": {
+      "sha512": "N8DPHGINwx2UNbtYXLxxc2cxJtLGV7t5Zczatj2vfEqm32QPBnjyOPqbEEt6fQ+zqz1N6B3apOO/nv3hXWU+xA==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
@@ -11555,7 +11555,7 @@
         "lib/net45/IdentityModel.pdb",
         "lib/portable-net45+wp80+win8+wpa81/IdentityModel.dll",
         "lib/portable-net45+wp80+win8+wpa81/IdentityModel.pdb",
-        "package/services/metadata/core-properties/1148934b32384f65be3d59b2fc8c3ea8.psmdcp"
+        "package/services/metadata/core-properties/3d8d24aef18142bd9278eed1655c085c.psmdcp"
       ]
     },
     "Microsoft.Bcl/1.1.10": {
@@ -15100,7 +15100,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "IdentityModel >= 1.4.2",
+      "IdentityModel >= 1.6.0",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
       "Newtonsoft.Json >= 8.0.2"
     ],
