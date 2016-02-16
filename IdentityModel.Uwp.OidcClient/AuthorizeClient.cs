@@ -13,11 +13,11 @@ namespace IdentityModel.Uwp.OidcClient
 {
     public class AuthorizeClient
     {
-        private readonly OidcClientSettings _settings;
+        private readonly OidcClientOptions _options;
 
-        public AuthorizeClient(OidcClientSettings settings)
+        public AuthorizeClient(OidcClientOptions options)
         {
-            _settings = settings;
+            _options = options;
         }
 
         public static string GetCallbackUrl()
@@ -37,7 +37,7 @@ namespace IdentityModel.Uwp.OidcClient
             result.Nonce = Guid.NewGuid().ToString("N");
             result.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri;
             string codeChallenge = CreateCodeChallenge(result);
-            var url = CreateUrl(result, codeChallenge);
+            var url = await CreateUrlAsync(result, codeChallenge);
             
             // try silent mode if requested
             if (trySilent)
@@ -45,7 +45,7 @@ namespace IdentityModel.Uwp.OidcClient
                 try
                 {
                     var options = WebAuthenticationOptions.SilentMode | WebAuthenticationOptions.UseHttpPost;
-                    if (_settings.EnableWindowsAuthentication)
+                    if (_options.EnableWindowsAuthentication)
                     {
                         options = options | WebAuthenticationOptions.UseCorporateNetwork;
                     }
@@ -70,7 +70,7 @@ namespace IdentityModel.Uwp.OidcClient
             try
             {
                 var options = WebAuthenticationOptions.UseHttpPost;
-                if (_settings.EnableWindowsAuthentication)
+                if (_options.EnableWindowsAuthentication)
                 {
                     options = options | WebAuthenticationOptions.UseCorporateNetwork;
                 }
@@ -89,7 +89,7 @@ namespace IdentityModel.Uwp.OidcClient
 
         private string CreateCodeChallenge(AuthorizeResult result)
         {
-            if (_settings.UseProofKeys)
+            if (_options.UseProofKeys)
             {
                 // todo: replace with CryptoRandom
                 result.Verifier = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
@@ -109,18 +109,18 @@ namespace IdentityModel.Uwp.OidcClient
             }
         }
 
-        private string CreateUrl(AuthorizeResult result, string codeChallenge)
+        private async Task<string> CreateUrlAsync(AuthorizeResult result, string codeChallenge)
         {
-            var request = new AuthorizeRequest(_settings.Endpoints.Authorize);
+            var request = new AuthorizeRequest((await _options.GetEndpointsAsync()).Authorize);
             var url = request.CreateAuthorizeUrl(
-                clientId: _settings.ClientId,
+                clientId: _options.ClientId,
                 responseType: OidcConstants.ResponseTypes.CodeIdToken,
-                scope: _settings.Scope,
+                scope: _options.Scope,
                 redirectUri: result.RedirectUri,
                 responseMode: OidcConstants.ResponseModes.FormPost,
                 nonce: result.Nonce,
                 codeChallenge: codeChallenge,
-                codeChallengeMethod: _settings.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null);
+                codeChallengeMethod: _options.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null);
 
             return url;
         }
