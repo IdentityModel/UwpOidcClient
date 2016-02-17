@@ -9,7 +9,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Security.Authentication.Web;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Web.Http;
@@ -19,17 +18,17 @@ namespace IdentityModel.Uwp.OidcClient
     public class OidcClient
     {
         private readonly AuthorizeClient _authorizeClient;
-        private readonly OidcClientSettings _settings;
+        private readonly OidcClientOptions _options;
 
-        public OidcClient(OidcClientSettings settings)
+        public OidcClient(OidcClientOptions options)
         {
-            _authorizeClient = new AuthorizeClient(settings);
-            _settings = settings;
+            _authorizeClient = new AuthorizeClient(options);
+            _options = options;
         }
 
-        public async Task<LoginResult> LoginAsync(bool trySilent = false)
+        public async Task<LoginResult> LoginAsync(bool trySilent = false, object extraParameters = null)
         {
-            var authorizeResult = await _authorizeClient.StartAsync(trySilent);
+            var authorizeResult = await _authorizeClient.AuthorizeAsync(trySilent, extraParameters);
 
             if (authorizeResult.IsError)
             {
@@ -43,34 +42,9 @@ namespace IdentityModel.Uwp.OidcClient
             return await ValidateAsync(authorizeResult);
         }
 
-        public async Task LogoutAsync(string identityToken = null, bool trySilent = true)
+        public Task LogoutAsync(string identityToken = null, bool trySilent = true)
         {
-            string url = _settings.Endpoints.EndSession;
-
-            if (!string.IsNullOrWhiteSpace(identityToken))
-            {
-                url += "?id_token_hint=" + identityToken;
-            }
-
-            WebAuthenticationResult result;
-            try
-            {
-                if (trySilent)
-                {
-                    result = await WebAuthenticationBroker.AuthenticateAsync(
-                        WebAuthenticationOptions.SilentMode, new Uri(url));
-
-                    if (result.ResponseStatus == WebAuthenticationStatus.Success)
-                    {
-                        return;
-                    }
-                }
-
-                result = await WebAuthenticationBroker.AuthenticateAsync(
-                    WebAuthenticationOptions.None, new Uri(url));
-            }
-            catch (Exception)
-            { }
+            return _authorizeClient.EndSessionAsync(identityToken, trySilent);
         }
 
         private async Task<LoginResult> ValidateAsync(AuthorizeResult result)
@@ -99,7 +73,7 @@ namespace IdentityModel.Uwp.OidcClient
 
             // validate audience
             var audience = principal.FindFirst("aud")?.Value ?? "";
-            if (!string.Equals(_settings.ClientId, audience))
+            if (!string.Equals(_options.ClientId, audience))
             {
                 return new LoginResult
                 {
@@ -134,8 +108,10 @@ namespace IdentityModel.Uwp.OidcClient
                 };
             }
 
+            var endpoints = await _options.GetEndpointsAsync();
+
             // get access token
-            var tokenClient = new TokenClient(_settings.Endpoints.Token, _settings.ClientId, _settings.ClientSecret);
+            var tokenClient = new TokenClient(endpoints.Token, _options.ClientId, _options.ClientSecret);
             var tokenResult = await tokenClient.RequestAuthorizationCodeAsync(
                 result.Code, 
                 result.RedirectUri, 
@@ -151,9 +127,9 @@ namespace IdentityModel.Uwp.OidcClient
             }
 
             // get profile if enabled
-            if (_settings.LoadProfile)
+            if (_options.LoadProfile)
             {
-                var userInfoClient = new UserInfoClient(new Uri(_settings.Endpoints.UserInfo), tokenResult.AccessToken);
+                var userInfoClient = new UserInfoClient(new Uri(endpoints.UserInfo), tokenResult.AccessToken);
                 var userInfoResponse = await userInfoClient.GetAsync();
 
                 var primaryClaimTypes = principal.Claims.Select(c => c.Type).Distinct();
@@ -185,11 +161,11 @@ namespace IdentityModel.Uwp.OidcClient
             var form = new Dictionary<string, string>
             {
                 { "token", identityToken },
-                { "client_id", _settings.ClientId }
+                { "client_id", _options.ClientId }
             };
 
             var response = await client.PostAsync(
-                new Uri(_settings.Endpoints.IdentityTokenValidation),
+                new Uri((await _options.GetEndpointsAsync()).IdentityTokenValidation),
                 new HttpFormUrlEncodedContent(form));
 
             if (!response.IsSuccessStatusCode)
@@ -223,9 +199,9 @@ namespace IdentityModel.Uwp.OidcClient
 
         private ClaimsPrincipal FilterProtocolClaims(ClaimsPrincipal principal)
         {
-            if (_settings.FilterProtocolClaims)
+            if (_options.FilterClaims)
             {
-                var filteredClaims = principal.Claims.ToList().Where(c => !_settings.ProtocolClaims.Contains(c.Type));
+                var filteredClaims = principal.Claims.ToList().Where(c => !_options.FilteredClaims.Contains(c.Type));
 
                 var id = new ClaimsIdentity(filteredClaims, principal.Identities.First().AuthenticationType);
                 return new ClaimsPrincipal(id);

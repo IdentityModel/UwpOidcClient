@@ -1,5 +1,7 @@
 ﻿using IdentityModel.Uwp.OidcClient;
+using IdentityModel.Uwp.OidcClient.WebView;
 using System.Text;
+using Windows.Security.Authentication.Web;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -10,8 +12,7 @@ namespace OidcClient
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        IdentityModel.Uwp.OidcClient.OidcClient _client;
-        LoginResult _result;
+        OidcTokenManager _manager;
 
         public MainPage()
         {
@@ -20,71 +21,67 @@ namespace OidcClient
 
         private async void buttonLogin_Click(object sender, RoutedEventArgs e)
         {
-            if (_client == null)
+            if (_manager == null)
             {
-                var settings = new OidcClientSettings("uwp", "secret", "openid profile write");
-                settings.UseProofKeys = true;
-
-                await settings.LoadEndpointsFromMetadataAsync("https://localhost:44333/core");
-
-                _client = new IdentityModel.Uwp.OidcClient.OidcClient(settings);
+                var webView = new UwpWebView();
+                var options = new OidcClientOptions("https://localhost:44333/core", "uwp", "secret", "openid profile write",
+                    WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri, webView);
+                _manager = new OidcTokenManager(options);
             }
 
-            _result = await _client.LoginAsync();
+            await _manager.LoginAsync();
             ShowLoginResult();
         }
 
         private async void buttonLogout_Click(object sender, RoutedEventArgs e)
         {
-            await _client.LogoutAsync(_result.IdentityToken);
+            await _manager.LogoutAsync();
 
-            _result = null;
             textBox.Text = "";
         }
 
         private void ShowLoginResult()
         {
-            if (!_result.Success)
+            if (_manager.Error != null)
             {
-                textBox.Text = _result.Error;
+                textBox.Text = _manager.Error;
                 return;
             }
 
             var sb = new StringBuilder(128);
 
-            foreach (var claim in _result.Principal.Claims)
+            foreach (var claim in _manager.User.Claims)
             {
                 sb.AppendLine($"{claim.Type}: {claim.Value}");
             }
 
-            sb.AppendLine($"access token: {_result.AccessToken}");
-            sb.AppendLine($"access token expiration: {_result.AccessTokenExpiration}");
+            sb.AppendLine($"access token: {_manager.AccessToken}");
 
             textBox.Text = sb.ToString();
         }
 
         private void buttonStore_Click(object sender, RoutedEventArgs e)
         {
-            if (_result != null)
-            {
-                _result.Store();
-                textBox.Text = "OK";
-            }
+            //if (_result != null)
+            //{
+            //    _result.Store();
+            //    textBox.Text = "OK";
+            //}
         }
 
         private void buttonRetrieve_Click(object sender, RoutedEventArgs e)
         {
-            var result = LoginResult.Retrieve();
+            //var result = LoginResult.Retrieve();
 
-            if (result != null)
-            {
-                _result = result;
-                ShowLoginResult();
-            }
-            else
-            {
-                textBox.Text = "no result, or expired";
-            }
+            //if (result != null)
+            //{
+            //    _result = result;
+            //    ShowLoginResult();
+            //}
+            //else
+            //{
+            //    textBox.Text = "no result, or expired";
+            //}
         }
     }
 }
