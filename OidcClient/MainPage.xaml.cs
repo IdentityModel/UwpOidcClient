@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Uwp.OidcClient;
+using IdentityModel.Uwp.OidcClient.WebView;
 using System.Text;
 using Windows.Security.Authentication.Web;
 using Windows.UI.Xaml;
@@ -22,7 +23,7 @@ namespace OidcClient
         {
             if (_manager == null)
             {
-                var webView = new UwpWebView(true);
+                var webView = new UwpWebView();
                 var options = new OidcClientOptions("https://localhost:44333/core", "uwp", "secret", "openid profile write",
                     WebAuthenticationBroker.GetCurrentApplicationCallbackUri().AbsoluteUri, webView);
                 _manager = new OidcTokenManager(options);

@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Client;
+using IdentityModel.Uwp.OidcClient.WebView;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace IdentityModel.Uwp.OidcClient
 
         public async Task<AuthorizeResult> AuthorizeAsync(bool trySilent = false, object extraParameters = null)
         {
-            WebViewInvokeResult wviResult;
+            InvokeResult wviResult;
             AuthorizeResult result = new AuthorizeResult
             {
                 IsError = true,
@@ -38,38 +39,26 @@ namespace IdentityModel.Uwp.OidcClient
             result.RedirectUri = _options.RedirectUri;
             string codeChallenge = CreateCodeChallenge(result);
             var url = await CreateUrlAsync(result, codeChallenge, extraParameters);
-            
-            // try silent mode if requested
+            var webViewOptions = new InvokeOptions(url, _options.RedirectUri);
             if (trySilent)
             {
-                try
-                {
-                    wviResult = await _options.WebView.InvokeAsync(url, _options.RedirectUri, true);
-
-                    if (wviResult.Success)
-                    {
-                        return await ParseResponse(wviResult.Response, result);
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    result.Error = ex.InnerException.Message;
-                    return result;
-                }
+                webViewOptions.InitialDisplayMode = DisplayMode.Hidden;
             }
-
-            // fall back to interactive mode
-            try
+            if (_options.UseFormPost)
             {
-                wviResult = await _options.WebView.InvokeAsync(url, _options.RedirectUri);
-            }
-            catch (InvalidOperationException ex)
-            {
-                result.Error = ex.InnerException.Message;
-                return result;
+                webViewOptions.ResponseMode = ResponseMode.FormPost;
             }
 
-            return await ParseResponse(wviResult.Response, result);
+            // try silent mode if requested
+            wviResult = await _options.WebView.InvokeAsync(webViewOptions);
+
+            if (wviResult.ResultType == InvokeResultType.Success)
+            {
+                return await ParseResponse(wviResult.Response, result);
+            }
+
+            result.Error = wviResult.ResultType.ToString();
+            return result;
         }
 
         public async Task EndSessionAsync(string identityToken = null, bool trySilent = true)
@@ -78,28 +67,21 @@ namespace IdentityModel.Uwp.OidcClient
 
             if (!string.IsNullOrWhiteSpace(identityToken))
             {
-                url += "?id_token_hint=" + identityToken;
+                url += $"?{OidcConstants.EndSessionRequest.IdTokenHint}={identityToken}" +
+                       $"&{OidcConstants.EndSessionRequest.PostLogoutRedirectUri}={_options.RedirectUri}";
             }
 
-            WebAuthenticationResult result;
-            try
+            var webViewOptions = new InvokeOptions(url, _options.RedirectUri)
             {
-                if (trySilent)
-                {
-                    result = await WebAuthenticationBroker.AuthenticateAsync(
-                        WebAuthenticationOptions.SilentMode, new Uri(url));
+                ResponseMode = ResponseMode.Redirect
+            };
 
-                    if (result.ResponseStatus == WebAuthenticationStatus.Success)
-                    {
-                        return;
-                    }
-                }
-
-                result = await WebAuthenticationBroker.AuthenticateAsync(
-                    WebAuthenticationOptions.None, new Uri(url));
+            if (trySilent)
+            {
+                webViewOptions.InitialDisplayMode = DisplayMode.Hidden;
             }
-            catch (Exception)
-            { }
+
+            var result = await _options.WebView.InvokeAsync(webViewOptions);
         }
 
         private string CreateCodeChallenge(AuthorizeResult result)
@@ -132,7 +114,7 @@ namespace IdentityModel.Uwp.OidcClient
                 responseType: OidcConstants.ResponseTypes.CodeIdToken,
                 scope: _options.Scope,
                 redirectUri: result.RedirectUri,
-                responseMode: OidcConstants.ResponseModes.FormPost,
+                responseMode: _options.UseFormPost ? OidcConstants.ResponseModes.FormPost : null,
                 nonce: result.Nonce,
                 codeChallenge: codeChallenge,
                 codeChallengeMethod: _options.UseProofKeys ? OidcConstants.CodeChallengeMethods.Sha256 : null,

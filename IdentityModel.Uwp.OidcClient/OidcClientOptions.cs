@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IdentityModel.Uwp.OidcClient.WebView;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,8 +13,9 @@ namespace IdentityModel.Uwp.OidcClient
         public string ClientSecret { get; }
         public string Scope { get; }
         public string RedirectUri { get; }
-        public WebViewBase WebView { get; }
+        public IWebView WebView { get; }
         public Flow Flow { get; set; } = Flow.Hybrid;
+        public bool UseFormPost { get; set; } = true;
         public bool LoadProfile { get; set; } = true;
         public bool FilterClaims { get; set; } = true;
         public bool UseProofKeys { get; set; } = true;
@@ -31,7 +33,7 @@ namespace IdentityModel.Uwp.OidcClient
             JwtClaimTypes.AccessTokenHash
         };
 
-        private OidcClientOptions(string clientId, string clientSecret, string scope, string redirectUri, WebViewBase webView)
+        private OidcClientOptions(string clientId, string clientSecret, string scope, string redirectUri, IWebView webView)
         {
             if (string.IsNullOrWhiteSpace(clientId)) throw new ArgumentNullException(nameof(clientId));
             if (string.IsNullOrWhiteSpace(clientSecret)) throw new ArgumentNullException(nameof(clientSecret));
@@ -45,7 +47,7 @@ namespace IdentityModel.Uwp.OidcClient
             RedirectUri = redirectUri;
             WebView = webView;
         }
-        public OidcClientOptions(Endpoints endpoints, string clientId, string clientSecret, string scope, string redirectUri, WebViewBase webView)
+        public OidcClientOptions(Endpoints endpoints, string clientId, string clientSecret, string scope, string redirectUri, IWebView webView)
             : this(clientId, clientSecret, scope, redirectUri, webView)
         {
             if (endpoints == null) throw new ArgumentNullException(nameof(endpoints));
@@ -54,7 +56,7 @@ namespace IdentityModel.Uwp.OidcClient
             _endpoints = new Lazy<Task<Endpoints>>(() => Task.FromResult(endpoints));
         }
 
-        public OidcClientOptions(string authority, string clientId, string clientSecret, string scope, string redirectUri, WebViewBase webView)
+        public OidcClientOptions(string authority, string clientId, string clientSecret, string scope, string redirectUri, IWebView webView)
             : this(clientId, clientSecret, scope, redirectUri, webView)
         {
             if (string.IsNullOrWhiteSpace(authority)) throw new ArgumentNullException(nameof(authority));

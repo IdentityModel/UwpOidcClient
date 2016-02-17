@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IdentityModel.Uwp.OidcClient
+namespace IdentityModel.Uwp.OidcClient.WebView
 {
-    public class WebViewInvokeResult
+    public class InvokeResult
     {
-        public bool Success { get; set; }
+        public InvokeResultType ResultType { get; set; }
         public string Response { get; set; }
         public string Error { get; set; }
     }
